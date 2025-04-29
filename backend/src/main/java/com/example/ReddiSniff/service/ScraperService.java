@@ -1,6 +1,6 @@
 package com.example.ReddiSniff.service;
 
-import com.example.ReddiSniff.repository.ScrapedPost;
+import com.example.ReddiSniff.dto.ScrapedPost;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;

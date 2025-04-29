@@ -1,6 +1,6 @@
 package com.example.ReddiSniff.controller;
 
-import com.example.ReddiSniff.repository.ScrapedPost;
+import com.example.ReddiSniff.dto.ScrapedPost;
 import com.example.ReddiSniff.service.ScraperService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;

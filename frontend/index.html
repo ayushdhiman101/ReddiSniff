@@ -231,7 +231,8 @@
 
         const url = `ReddiSniff/api/fetch/${subreddit}?listingType=${listingType}&limit=${limit}&time=${time}&commentLimit=${commentLimit}`;
         document.getElementById("urlPreview").textContent = url;
-        return url;
+        const url2 = `https://reddisniff-production.up.railway.app/fetch/${subreddit}?listingType=${listingType}&limit=${limit}&time=${time}&commentLimit=${commentLimit}`;
+        return url2;
       }
 
       const inputs = document.querySelectorAll("input, select");
