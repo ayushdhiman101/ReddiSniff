@@ -242,7 +242,13 @@
       async function sniff() {
         const url = updateURL();
         try {
-          const res = await fetch(url);
+          const res = await fetch(url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: params.toString()
+              });
           const json = await res.json();
           document.getElementById("jsonOutput").textContent = JSON.stringify(
             json,
