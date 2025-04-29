@@ -98,6 +98,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>ReddiSniff</finalName>
 	</build>
 
 </project>
