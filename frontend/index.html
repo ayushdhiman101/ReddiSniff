@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReddiSniff</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Outfit", sans-serif;
+        background: linear-gradient(to bottom right, #000000, #1a1a1a);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+
+      h1 {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 40px;
+        background: linear-gradient(to right, #ffffff, #cccccc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .input-group {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px;
+        justify-content: center;
+        overflow-x: auto;
+        margin-bottom: 12px;
+      }
+
+      select,
+      input[type="text"],
+      input[type="number"] {
+        padding: 8px 12px;
+        background: linear-gradient(to bottom, #333333, #2a2a2a);
+        border: 2px solid;
+        border-image: linear-gradient(to right, #888888, #666666) 1;
+        border-radius: 8px;
+        color: white;
+        font-size: 14px;
+        min-width: 120px;
+        max-width: 140px;
+        width: 100%;
+        outline: none;
+      }
+
+      select {
+        background-color: #000000;
+        color: white;
+      }
+
+      option {
+        background-color: black;
+        color: white;
+      }
+
+      button {
+        padding: 10px 20px;
+        background: linear-gradient(to right, #ff3300, #cc0000);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(255, 51, 0, 0.3);
+      }
+
+      .url-preview {
+        margin-top: 20px;
+        font-size: 16px;
+        color: #bbb;
+        font-family: monospace;
+        opacity: 0.8;
+      }
+
+      .json-output {
+        margin-top: 20px;
+        background: linear-gradient(to right, #2c2c2c, #3a3a3a);
+        color: #fff;
+        padding: 20px;
+        width: 90%;
+        max-width: 1000px;
+        border-radius: 12px;
+        font-family: monospace;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+        border: 1px solid #444;
+      }
+
+      .param-table {
+        margin-top: 50px;
+        width: 90%;
+        max-width: 1000px;
+        border-collapse: collapse;
+        background: #1c1c1c;
+        border: 1px solid #444;
+      }
+
+      .param-table th,
+      .param-table td {
+        border: 1px solid #444;
+        padding: 12px 15px;
+        text-align: left;
+        color: #eee;
+      }
+
+      .param-table th {
+        background-color: #2a2a2a;
+        font-weight: bold;
+      }
+
+      @media (max-width: 1000px) {
+        .input-group {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ReddiSniff</h1>
+
+    <div class="input-group">
+      <input type="text" id="subreddit" placeholder="Subreddit" />
+      <select id="listingType">
+        <option value="" disabled selected>Listing</option>
+        <option value="new">new</option>
+        <option value="hot">hot</option>
+        <option value="top">top</option>
+      </select>
+      <input type="number" id="limit" placeholder="Limit" min="0" max="100" />
+      <select id="time">
+        <option value="" disabled selected>Time</option>
+        <option value="hour">hour</option>
+        <option value="day">day</option>
+        <option value="week">week</option>
+      </select>
+      <!-- <input type="number" id="after" placeholder="After" />
+      <input type="number" id="before" placeholder="Before" /> -->
+      <input
+        type="number"
+        id="commentLimit"
+        placeholder="Comments"
+        min="0"
+        max="10"
+      />
+    </div>
+
+    <div style="text-align: center; margin-bottom: 20px">
+      <button onclick="sniff()">Sniff</button>
+    </div>
+
+    <div class="url-preview" id="urlPreview">ReddiSniff/api/fetch/...</div>
+    <div class="json-output" id="jsonOutput">
+      Sniff results will appear here...
+    </div>
+
+    <table class="param-table">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>subreddit</strong></td>
+          <td>Subreddit name (e.g., <code>java</code>, <code>funny</code>)</td>
+        </tr>
+        <tr>
+          <td><strong>listingType</strong></td>
+          <td><code>new</code>, <code>hot</code>, or <code>top</code></td>
+        </tr>
+        <tr>
+          <td><strong>limit</strong></td>
+          <td>Number of posts to fetch (e.g., 10, 25, 50)</td>
+        </tr>
+        <tr>
+          <td><strong>time</strong></td>
+          <td>
+            Time filter for <code>top</code> listing (<code>hour</code>,
+            <code>day</code>, etc.)
+          </td>
+        </tr>
+        <!-- <tr>
+          <td><strong>after</strong></td>
+          <td>After timestamp or ID (optional)</td>
+        </tr>
+        <tr>
+          <td><strong>before</strong></td>
+          <td>Before timestamp or ID (optional)</td>
+        </tr>
+        <tr> -->
+          <td><strong>commentLimit</strong></td>
+          <td>Number of top comments per post</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script>
+      function updateURL() {
+        const subreddit = document.getElementById("subreddit").value.trim();
+        const listingType = document.getElementById("listingType").value;
+        const limit = document.getElementById("limit").value;
+        const time = document.getElementById("time").value;
+        // const after = document.getElementById("after").value;
+        // const before = document.getElementById("before").value;
+        const commentLimit = document.getElementById("commentLimit").value;
+
+        const url = `ReddiSniff/api/fetch/${subreddit}?listingType=${listingType}&limit=${limit}&time=${time}&commentLimit=${commentLimit}`;
+        document.getElementById("urlPreview").textContent = url;
+        return url;
+      }
+
+      const inputs = document.querySelectorAll("input, select");
+      inputs.forEach((input) => input.addEventListener("input", updateURL));
+      inputs.forEach((input) => input.addEventListener("change", updateURL));
+
+      async function sniff() {
+        const url = updateURL();
+        try {
+          const res = await fetch(url);
+          const json = await res.json();
+          document.getElementById("jsonOutput").textContent = JSON.stringify(
+            json,
+            null,
+            2
+          );
+        } catch (err) {
+          document.getElementById("jsonOutput").textContent =
+            "Error fetching data from backend.";
+        }
+      }
+
+      window.onload = updateURL;
+    </script>
+  </body>
+</html>

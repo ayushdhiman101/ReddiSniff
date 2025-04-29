@@ -1,0 +1,9 @@
+com\example\ReddiSniff\ReddiSniffApplication.class
+com\example\ReddiSniff\repository\ScrapedPost$ScrapedPostBuilder.class
+com\example\ReddiSniff\repository\ScrapedPost.class
+com\example\ReddiSniff\controller\AuthController.class
+com\example\ReddiSniff\repository\User$UserBuilder.class
+com\example\ReddiSniff\dto\ScrapedPostDTO.class
+com\example\ReddiSniff\repository\User.class
+com\example\ReddiSniff\service\ScraperService.class
+com\example\ReddiSniff\config\SecurityConfig.class
