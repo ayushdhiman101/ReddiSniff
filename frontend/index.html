@@ -18,7 +18,7 @@
         margin: 0;
         padding: 0;
         font-family: "Outfit", sans-serif;
-        background: linear-gradient(to bottom right, #000000, #1a1a1a);
+        background: linear-gradient(to bottom right, #0f0f0f, #1f1f1f, #292929, #111111);
         color: white;
         display: flex;
         flex-direction: column;
@@ -153,6 +153,57 @@
         font-size: 14px;
         line-height: 1.5;
       }
+      .key {
+        color: #9cdcfe;
+      }
+      .string {
+        color: #ce9178;
+      }
+      .number {
+        color: #b5cea8;
+      }
+      .boolean {
+        color: #569cd6;
+      }
+      .null {
+        color: #dcdcaa;
+      }
+      /* Loader */
+      .loader {
+        border: 4px solid #555;
+        border-top: 4px solid #999;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: auto;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      /* Instructions */
+      .instructions {
+        margin-top: 40px;
+        padding: 20px;
+        background: linear-gradient(to right, #2c2c2c, #3a3a3a);
+        border-radius: 5px;
+        width: 90%;
+        max-width: 1000px;
+        color: #ddd;
+      }
+      .instructions pre {
+        background: #1e1e1e;
+        padding: 10px;
+        border-radius: 4px;
+        overflow-x: auto;
+        color: #fff;
+        font-family: monospace;
+      }
 </style>
     </style>
   </head>
@@ -191,8 +242,6 @@
 
     <div class="url-preview" id="urlPreview">ReddiSniff/api/fetch/...</div>
     <div class="json-output" id="jsonOutput">
-      <input type="checkbox" id="prettifyCheckbox" checked /> Prettify JSON Output
-      <br>
       Sniff results will appear here...
     <pre id="jsonOutput"></pre>
     </div>
@@ -239,6 +288,93 @@
       </tbody>
     </table>
 
+        <div class="instructions">
+      <h2>📚 How to call the API in your project</h2>
+
+      <p><strong>🔗 API Endpoint:</strong></p>
+      <pre>
+GET https://reddisniff-production.up.railway.app/api/auth/fetch/&lt;SubReddit&gt;?listingType=&limit=&time=&commentLimit=
+</pre
+      >
+
+      <p><strong>🌀 cURL Example:</strong></p>
+      <pre>
+curl -X GET "https://reddisniff-production.up.railway.app/api/auth/fetch/&lt;SubReddit&gt;?listingType=&limit=&time=&commentLimit="
+  </pre
+      >
+
+      <p><strong>🌐 JavaScript (fetch) Example (Frontend/Backend):</strong></p>
+      <pre>
+fetch("https://reddisniff-production.up.railway.app/api/auth/fetch/&lt;SubReddit&gt;?listingType=&limit=&time=&commentLimit=")
+  .then(res => res.json())
+  .then(data => console.log(data));
+  </pre
+      >
+
+      <p>
+        <strong>⚡ JavaScript (Axios) Example (Node.js / Frontend):</strong>
+      </p>
+      <pre>
+import axios from 'axios';
+
+axios.get("https://reddisniff-production.up.railway.app/api/auth/fetch/&lt;SubReddit&gt;", {
+  params: {
+    listingType: '',
+    limit: ,
+    time: ,
+    commentLimit: ,
+  }
+})
+.then(response => console.log(response.data))
+.catch(error => console.error(error));
+  </pre
+      >
+
+      <p><strong>🚀 Spring Boot (Java) Example:</strong></p>
+      <pre>
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+public class ApiCaller {
+  public static void main(String[] args) {
+    RestTemplate restTemplate = new RestTemplate();
+
+    String url = UriComponentsBuilder
+      .fromHttpUrl("https://reddisniff-production.up.railway.app/api/auth/fetch/&lt;SubReddit&gt;")
+      .queryParam("listingType", "")
+      .queryParam("limit", )
+      .queryParam("time", )
+      .queryParam("commentLimit", )
+      .toUriString();
+
+    String response = restTemplate.getForObject(url, String.class);
+    System.out.println(response);
+  }
+}
+  </pre
+      >
+      <p><strong>📬 Postman Instructions:</strong></p>
+      <ul>
+        <li>Method: <code>GET</code></li>
+        <li>
+          URL:
+          <code
+            >https://reddisniff-production.up.railway.app/api/auth/fetch/&lt;SubReddit&gt;</code
+          >
+        </li>
+        <li>
+          Query Params:
+          <ul>
+            <li><code>listingType = </code></li>
+            <li><code>limit = </code></li>
+            <li><code>time = </code></li>
+            <li><code>commentLimit = </code></li>
+          </ul>
+        </li>
+      </ul>
+      </pre>
+    </div>
+
     <script>
       function updateURL() {
         const subreddit = document.getElementById("subreddit").value.trim();
@@ -260,6 +396,8 @@
       inputs.forEach((input) => input.addEventListener("change", updateURL));
 
   async function sniff() {
+    document.getElementById("jsonOutput").innerHTML =
+          '<div class="loader"></div>';
     const url = updateURL();
     try {
       const res = await fetch(url);  // GET request
