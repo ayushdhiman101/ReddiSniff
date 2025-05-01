@@ -16,6 +16,7 @@ public class AuthController {
     private ScraperService scraperService;
 
     @GetMapping("/fetch/{subreddit}")
+    @CrossOrigin(origins = "https://reddisniff.vercel.app")  // Allow only your Vercel frontend
     public List<ScrapedPost> fetchSubredditData(
             @PathVariable String subreddit,
             @RequestParam(defaultValue = "hot") String listingType,
