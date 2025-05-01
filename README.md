@@ -2,6 +2,10 @@
 
 Welcome to the **Reddit Scraper API**! This tool allows you to fetch data from Reddit subreddits, including posts and their associated comments, using the Reddit API. Whether you're building an analytics dashboard, content aggregation tool, or anything in between, this API provides an easy way to pull information from Reddit.
 
+🔗[Try it live](https://reddisniff.vercel.app/) -  No login. No signup. Just dev speed.
+
+---
+
 ## Features 🚀
 - Fetch Reddit posts from any subreddit.
 - Filter posts by listing type (hot, new, top, controversial).
