@@ -18,5 +18,5 @@ public class ScrapedPost {
     private Instant createdAt;
     private String url;
     private List<String> comments;
-
+    private String selfText;
 }

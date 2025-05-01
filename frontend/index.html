@@ -247,46 +247,89 @@
     </div>
 
     <table class="param-table">
-      <thead>
-        <tr>
-          <th>Parameter</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>subreddit</strong></td>
-          <td>Subreddit name (e.g., <code>java</code>, <code>funny</code>)</td>
-        </tr>
-        <tr>
-          <td><strong>listingType</strong></td>
-          <td><code>new</code>, <code>hot</code>, or <code>top</code></td>
-        </tr>
-        <tr>
-          <td><strong>limit</strong></td>
-          <td>Number of posts to fetch (e.g., 10, 25, 50)</td>
-        </tr>
-        <tr>
-          <td><strong>time</strong></td>
-          <td>
-            Time filter for <code>top</code> listing (<code>hour</code>,
-            <code>day</code>, etc.)
-          </td>
-        </tr>
-        <!-- <tr>
-          <td><strong>after</strong></td>
-          <td>After timestamp or ID (optional)</td>
-        </tr>
-        <tr>
-          <td><strong>before</strong></td>
-          <td>Before timestamp or ID (optional)</td>
-        </tr>
-        <tr> -->
-          <td><strong>commentLimit</strong></td>
-          <td>Number of top comments per post</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- Input Parameters Section -->
+  <thead>
+    <tr>
+      <th colspan="2">Input Parameters</th>
+    </tr>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>subreddit</code></td>
+      <td>The name of the subreddit from which to fetch data.</td>
+    </tr>
+    <tr>
+      <td><code>listingType</code></td>
+      <td>The type of post listing (e.g., <code>hot</code>, <code>new</code>, <code>top</code>, <code>controversial</code>).</td>
+    </tr>
+    <tr>
+      <td><code>limit</code></td>
+      <td>The maximum number of posts to fetch (e.g., 10, 25, 50).</td>
+    </tr>
+    <tr>
+      <td><code>time</code></td>
+      <td>For <code>top</code> or <code>controversial</code>, filters posts based on time (e.g., <code>hour</code>, <code>day</code>, <code>week</code>).</td>
+    </tr>
+    <tr>
+      <td><code>after</code></td>
+      <td>Used for pagination; fetch posts after the specified post ID.</td>
+    </tr>
+    <tr>
+      <td><code>before</code></td>
+      <td>Used for pagination; fetch posts before the specified post ID.</td>
+    </tr>
+    <tr>
+      <td><code>commentLimit</code></td>
+      <td>The maximum number of comments to fetch per post.</td>
+    </tr>
+  </tbody>
+
+  <!-- JSON Output Parameters Section -->
+  <thead>
+    <tr>
+      <th colspan="2">JSON Output Parameters</th>
+    </tr>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>title</code></td>
+      <td>The title of the Reddit post.</td>
+    </tr>
+    <tr>
+      <td><code>author</code></td>
+      <td>The username of the post's author.</td>
+    </tr>
+    <tr>
+      <td><code>url</code></td>
+      <td>The direct URL to the Reddit post.</td>
+    </tr>
+    <tr>
+      <td><code>subreddit</code></td>
+      <td>The name of the subreddit the post belongs to.</td>
+    </tr>
+    <tr>
+      <td><code>ups</code></td>
+      <td>The number of upvotes the post has received.</td>
+    </tr>
+    <tr>
+      <td><code>selftext</code></td>
+      <td>The body of the post (text content) if the post is a text post; otherwise, it is empty or null.</td>
+    </tr>
+    <tr>
+      <td><code>comments</code></td>
+      <td>A list of comments for the post (up to the specified <code>commentLimit</code>).</td>
+    </tr>
+  </tbody>
+</table>
+
 
         <div class="instructions">
       <h2>📚 How to call the API in your project</h2>

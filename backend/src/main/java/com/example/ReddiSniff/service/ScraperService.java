@@ -75,6 +75,11 @@ public class ScraperService {
                     post.setSubreddit(subreddit);
                     post.setUpvotes(postData.get("ups").asInt());
 
+                    // **NEW**: extract the body text if present
+                    String selftext = postData.path("selftext").asText();
+                    if (!selftext.isEmpty()) {
+                        post.setSelfText(selftext);
+                    }
                     // Now fetch the comments for each post
                     String postId = postData.get("id").asText();
                     List<String> comments = fetchComments(subreddit, postId, commentLimit);
