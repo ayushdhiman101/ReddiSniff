@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ReddiSniff</title>
+    <link rel="icon" href="https://img.icons8.com/?size=100&id=qIXgmLAZSVuE&format=png&color=000000" />
     <link
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap"
       rel="stylesheet"
@@ -259,13 +260,7 @@
         async function sniff() {
     const url = updateURL();
     try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: params.toString()
-      });
+      const res = await fetch(url);  // GET request
       const json = await res.json();
 
       // Check if prettify checkbox is checked
