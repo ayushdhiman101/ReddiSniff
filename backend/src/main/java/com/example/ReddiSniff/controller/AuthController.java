@@ -15,7 +15,7 @@ public class AuthController {
     @Autowired
     private ScraperService scraperService;
 
-    @PostMapping("/fetch/{subreddit}")
+    @GetMapping("/fetch/{subreddit}")
     public List<ScrapedPost> fetchSubredditData(
             @PathVariable String subreddit,
             @RequestParam(defaultValue = "hot") String listingType,

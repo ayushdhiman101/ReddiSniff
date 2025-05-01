@@ -240,15 +240,9 @@
       inputs.forEach((input) => input.addEventListener("change", updateURL));
 
       async function sniff() {
-        const url = updateURL();
+        const url = updateURL();  // Already contains query params
         try {
-          const res = await fetch(url, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: params.toString()
-              });
+          const res = await fetch(url);  // GET request
           const json = await res.json();
           document.getElementById("jsonOutput").textContent = JSON.stringify(
             json,
@@ -256,8 +250,8 @@
             2
           );
         } catch (err) {
-          document.getElementById("jsonOutput").textContent =
-            "Error fetching data from backend.";
+          document.getElementById("jsonOutput").textContent = "Error fetching data from backend.";
+          console.error(err);
         }
       }
 
