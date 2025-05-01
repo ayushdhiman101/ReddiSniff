@@ -137,6 +137,20 @@
           justify-content: center;
         }
       }
+      /* Rainbow Brackets + Color */
+      .string { color: green; }
+      .number { color: darkorange; }
+      .boolean { color: blue; }
+      .null { color: magenta; }
+      .key { color: red; }
+
+      /* Optional: Make opening and closing braces same color */
+      #jsonOutput {
+        font-family: monospace;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+</style>
     </style>
   </head>
   <body>
@@ -174,7 +188,10 @@
 
     <div class="url-preview" id="urlPreview">ReddiSniff/api/fetch/...</div>
     <div class="json-output" id="jsonOutput">
+      <input type="checkbox" id="prettifyCheckbox" checked /> Prettify JSON Output
+      <br>
       Sniff results will appear here...
+    <pre id="jsonOutput"></pre>
     </div>
 
     <table class="param-table">
@@ -239,23 +256,58 @@
       inputs.forEach((input) => input.addEventListener("input", updateURL));
       inputs.forEach((input) => input.addEventListener("change", updateURL));
 
-      async function sniff() {
-        const url = updateURL();  // Already contains query params
-        try {
-          const res = await fetch(url);  // GET request
-          const json = await res.json();
-          document.getElementById("jsonOutput").textContent = JSON.stringify(
-            json,
-            null,
-            2
-          );
-        } catch (err) {
-          document.getElementById("jsonOutput").textContent = "Error fetching data from backend.";
-          console.error(err);
-        }
-      }
+        async function sniff() {
+    const url = updateURL();
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString()
+      });
+      const json = await res.json();
 
+      // Check if prettify checkbox is checked
+      const prettify = document.getElementById("prettifyCheckbox").checked;
+
+      if (prettify) {
+        document.getElementById("jsonOutput").innerHTML = syntaxHighlight(json);
+      } else {
+        document.getElementById("jsonOutput").textContent = JSON.stringify(json);
+      }
+    } catch (err) {
+      document.getElementById("jsonOutput").textContent = "Error fetching data from backend.";
+    }
+  }
       window.onload = updateURL;
+
+  // Function to colorize JSON
+  function syntaxHighlight(json) {
+    if (typeof json != "string") {
+      json = JSON.stringify(json, undefined, 2);
+    }
+    json = json.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return json.replace(
+      /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\\s*:)?|\b(true|false|null)\b|\b-?\d+(\.\d*)?([eE][+-]?\d+)?\b)/g,
+      function (match) {
+        let cls = "number";
+        if (/^"/.test(match)) {
+          if (/:$/.test(match)) {
+            cls = "key";
+          } else {
+            cls = "string";
+          }
+        } else if (/true|false/.test(match)) {
+          cls = "boolean";
+        } else if (/null/.test(match)) {
+          cls = "null";
+        }
+        return '<span class="' + cls + '">' + match + "</span>";
+      }
+    );
+  }
+
     </script>
   </body>
 </html>
