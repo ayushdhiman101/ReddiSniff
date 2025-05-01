@@ -139,18 +139,20 @@
         }
       }
       /* Rainbow Brackets + Color */
-      .string { color: green; }
-      .number { color: darkorange; }
-      .boolean { color: blue; }
-      .null { color: magenta; }
-      .key { color: red; }
+      .string { color: #ce9178; }  /* reddish-orange (VSCode string) */
+      .number { color: #b5cea8; }  /* greenish (numbers) */
+      .boolean { color: #569cd6; } /* blue */
+      .null { color: #569cd6; }    /* blue (same as boolean) */
+      .key { color: #9cdcfe; }     /* light blue (keys) */
 
-      /* Optional: Make opening and closing braces same color */
+      /* Brackets use default font color (dark) */
       #jsonOutput {
         font-family: monospace;
         white-space: pre-wrap;
         word-break: break-word;
-    }
+        font-size: 14px;
+        line-height: 1.5;
+      }
 </style>
     </style>
   </head>
@@ -257,27 +259,26 @@
       inputs.forEach((input) => input.addEventListener("input", updateURL));
       inputs.forEach((input) => input.addEventListener("change", updateURL));
 
-        async function sniff() {
+  async function sniff() {
     const url = updateURL();
     try {
       const res = await fetch(url);  // GET request
+
+      if (!res.ok) {
+        throw new Error(`Backend error: ${res.status}`);
+      }
+
       const json = await res.json();
 
-      // Check if prettify checkbox is checked
-      const prettify = document.getElementById("prettifyCheckbox").checked;
+      // Always prettify with syntax highlight
+      document.getElementById("jsonOutput").innerHTML = syntaxHighlight(json);
 
-      if (prettify) {
-        document.getElementById("jsonOutput").innerHTML = syntaxHighlight(json);
-      } else {
-        document.getElementById("jsonOutput").textContent = JSON.stringify(json);
-      }
     } catch (err) {
-      document.getElementById("jsonOutput").textContent = "Error fetching data from backend.";
+      document.getElementById("jsonOutput").textContent = "Error fetching data from backend.\n" + err;
     }
   }
-      window.onload = updateURL;
 
-  // Function to colorize JSON
+  // Function to colorize JSON (VSCode-ish colors)
   function syntaxHighlight(json) {
     if (typeof json != "string") {
       json = JSON.stringify(json, undefined, 2);
